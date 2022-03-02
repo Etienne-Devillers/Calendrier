@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    width: 100vw;
+    background-color: rgb(46, 43, 43);
+    padding: 0.5em 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+header h1 {
+    color: white;
+    margin-left: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+header label {
+    color: white;
+}
+
+header form{
+    margin: 0 0.5rem;
+}
+
+.monthsMenu {
+    height: 75px;
+    background-color: rgb(131, 127, 127);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
