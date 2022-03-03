@@ -1,4 +1,5 @@
 <?php
+
 //initialisaion du projet, définition des variables.
 
 //variable qui contient les douzes mois de l'année.
@@ -17,19 +18,52 @@ $monthsInYear = [
                 '12' => 'Décembre'
 ];
 
-//Déclaration du numéro du moi actuel
+//Déclaration du numéro du mois actuel
 $monthNumber = date('m');
 
 
 //Déclaration de la variable pour avoir notre échantillon d'année.
 $year = date('Y');
 
+    $monthChoice = $_POST['month'] ?? date('n');
+    $chosenMonth = $monthsInYear[$monthChoice];
+    $lastMonth = ($monthChoice-1);
+    $nextMonth = ($monthChoice+1);
+    $chosenYear = $_POST['year'] ?? date('Y');
+    $displayChoice = new DateTime("$chosenYear-$monthChoice");
 
-if (isset($_POST['month'])) {
-    $chosenMonth = $monthsInYear[$_POST['month']];
-$lastMonth= ($_POST['month']-1);
-$nextMonth= ($_POST['month']+1);
-}
+//On trouve le premier jour du mois.
+
+$firstDay = $displayChoice-> format('N');
+
+
+
+// 0 Dimanche -> 6 Samedi
+
+//Combien de jour dans un mois.
+$daysForSpecificMonth = cal_days_in_month(CAL_GREGORIAN, $monthChoice, $chosenYear);
+
+//combien de semaine dans le mois.
+function weeksInMonth($dayCount, $daysForSpecificMonth) {
+    $weeksInMonth = 1;
+    for ($i=1; $i < $daysForSpecificMonth; $i++) { 
+        
+        if ($dayCount == 7) {
+            $dayCount = 0;
+            $weeksInMonth++;
+        } 
+        $dayCount++;
+        
+    //var_dump('jour:'.$dayCount. ', ');
+    //var_dump('nbr de semaine:'.$weeksInMonth.'<br>');
+    }
+    return $weeksInMonth;
+    }
+
+// .
+    $weeksInMonth =weeksInMonth($firstDay, $daysForSpecificMonth);
+$weeksDisplay = $weeksInMonth*7;
+
 ?>
 
 
@@ -48,28 +82,29 @@ $nextMonth= ($_POST['month']+1);
 
 <body>
     <header>
-        <h1>Calendrier - <?=$chosenMonth ?? 'à définir'?></h1>
+        <h1>Calendrier -
+            <?= (($chosenYear) && ($monthChoice))? $chosenMonth.' '.$chosenYear : 'à définir' ;?></h1>
         <div class="displayChoices">
             <form action="" method="post">
 
-            <!-- Création du select pour les mois de l'année. -->
+                <!-- Création du select pour les mois de l'année. -->
                 <label class="label" for="month">Mois : </label>
                 <select name="month">
                     <?php foreach ($monthsInYear as $key => $value) {
                         $isSelected = ( $key == $monthNumber) ? 'selected' : ''; ?>
-                        <option value="<?=$key?>"<?=$isSelected?>><?=$value?></option>
+                    <option value="<?=$key?>" <?=$isSelected?>><?=$value?></option>
                     <?php
                     }?>
                 </select>
-                
+
 
                 <!-- Création du select pour les années. -->
                 <label class="label" for="year">Année : </label>
                 <select name="year">
                     <?php for ($i = $year-10; $i  <= $year+10 ; $i ++) {
                         $isSelected = ($i==$year) ? 'selected' : ''; ?>
-                        
-                        <option value="<?=$i?>" <?=$isSelected?>><?=$i?></option>
+
+                    <option value="<?=$i?>" <?=$isSelected?>><?=$i?></option>
                     <?php
                     }
                     ?>
@@ -79,15 +114,66 @@ $nextMonth= ($_POST['month']+1);
             </form>
         </div>
     </header>
-    <div class="monthsMenu">
-<div>
-< <?=$monthsInYear[$lastMonth??''] ?? 'Mois précédent'?>
-</div>
 
-<div>
-<?=$monthsInYear[$nextMonth??''] ?? 'Mois suivant'?> > 
-</div>
+    <div class="monthsMenu">
+        <div>
+            < <?=$monthsInYear[$lastMonth??''] ?? 'Mois précédent'?> 
+        </div>
+        <div>
+            <?=$monthsInYear[$nextMonth??''] ?? 'Mois suivant'?> >
+        </div>
     </div>
+
+
+    <section class="tableau">
+<table>
+
+
+<tr>
+    <th>Lundi</th>
+    <th>Mardi</th>
+    <th>Mercredi</th>
+    <th>Jeudi</th>
+    <th>Vendredi</th>
+    <th>Samedi</th>
+    <th>Dimanche</th>
+</tr>
+<tr>
+
+
+<?php
+$day = 1 ;
+$stop=false;
+while ($day <= $weeksDisplay) {
+    while($day<$firstDay) {
+        echo ' <td><span class="emptyBox">-</span></td>';
+        $day++;
+    }
+    while((($day-$firstDay)+1) <= $daysForSpecificMonth) {
+        if ($day%7 == 0) {
+            if ($daysForSpecificMonth-$day<=1 && $weeksDisplay-$day<=1 ) {
+                echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td>';
+                $stop=true;
+            } else {
+                echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td> </tr><tr>';
+            }            
+        } else if ($day == 6 || $day == (6+n*7)) {
+            echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td>';
+        } else {
+            echo '<td><span>'.(($day-$firstDay)+1).'</span></td>';
+        }
+        $day++;
+    }
+    echo (!$stop) ? ' <td><span class="emptyBox">-</span></td>': '';
+    $day++;
+    }
+
+?>
+</tr>
+</table>
+
+
+    </section>
 
 
 
