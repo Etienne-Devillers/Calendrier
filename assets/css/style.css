@@ -117,6 +117,21 @@ td span {
     color: white;
     font-size: 2em;
 }
+.actualDay{
+    border-radius: 50%;
+    width:100px;
+    height: 36px;
+    padding: 8px;
+
+    background: #333333;
+    border: 2px solid rgb(179, 9, 9);
+    color: rgb(255, 255, 255);
+    text-align: center;
+
+    font: 32px Arial, sans-serif;
+}
+
+
 
 .short {
     display: none;

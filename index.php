@@ -1,5 +1,5 @@
 <?php
-
+$actualMonth = false;
 //initialisaion du projet, définition des variables.
 
 //variable qui contient les douzes mois de l'année.
@@ -57,7 +57,14 @@ $nextDisplayYear = $nextYear->format('Y');
 //On trouve le premier jour du mois.
 $firstDay = $displayChoice-> format('N');
 
+//vérification si on est sur le mois en cours 
+if ($monthChoice == date('n') && $chosenYear == date('Y')) {
+    $actualMonth = true;
+}
 
+//Identification du jour actuel
+$dayToday = date('j');
+var_dump($dayToday);
 
 //Combien de jour dans un mois.
 $daysForSpecificMonth = cal_days_in_month(CAL_GREGORIAN, $monthChoice, $chosenYear);
@@ -170,7 +177,9 @@ while ($day <= $weeksDisplay) {
         $day++;
     }
     while((($day-$firstDay)+1) <= $daysForSpecificMonth) {
-        if ($day%7 == 0) {
+        if ($countDay->format('j') == $dayToday) {
+            echo '<td><span class="actualDay">'.(($day-$firstDay)+1).'</span></td>';
+        } else if  ($day%7 == 0) {
             if ($daysForSpecificMonth-$day<=1 && $weeksDisplay-$day<=1 ) {
                 echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td>';
                 $stop=true;
@@ -182,12 +191,15 @@ while ($day <= $weeksDisplay) {
         } else {
             echo '<td><span>'.(($day-$firstDay)+1).'</span></td>';
         }
+        
         $countDay->add(new DateInterval('P1D'));
         $day++;
     }
     echo (!$stop) ? ' <td><span class="emptyBox">-</span></td>': '';
+    $countDay->add(new DateInterval('P1D'));
     $day++;
     }
+        
 
 ?>
 </tr>
