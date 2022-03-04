@@ -36,11 +36,8 @@ if (!empty($_GET['month']) && !empty($_GET['year'])) {
 $chosenMonth = $monthsInYear[$monthChoice];
 $lastMonth = ($monthChoice-1);
 $nextMonth = ($monthChoice+1);
-
 $displayChoice = new DateTime("$chosenYear-$monthChoice");
 $countDay = new DateTime("$chosenYear-$monthChoice");
-
-
 
 
 //Création de year-1 et year +1
@@ -64,7 +61,6 @@ if ($monthChoice == date('n') && $chosenYear == date('Y')) {
 
 //Identification du jour actuel
 $dayToday = date('j');
-var_dump($dayToday);
 
 //Combien de jour dans un mois.
 $daysForSpecificMonth = cal_days_in_month(CAL_GREGORIAN, $monthChoice, $chosenYear);
@@ -112,7 +108,7 @@ $weeksDisplay = $weeksInMonth*7;
             <?= (($chosenYear) && ($monthChoice))? $chosenMonth.' '.$chosenYear : 'à définir' ;?></h1>
         <div class="displayChoices">
 
-        <!-- Formulaire -->
+        <!----------------------Formulaire----------------------->
             <form action="./index.php" method="post">
 
                 <!-- Création du select pour les mois de l'année. -->
@@ -151,7 +147,7 @@ $weeksDisplay = $weeksInMonth*7;
         </div>
     </div>
 
-
+<!--------------------Tableau--------------------->
     <section class="tableau">
 <table>
 
@@ -177,7 +173,7 @@ while ($day <= $weeksDisplay) {
         $day++;
     }
     while((($day-$firstDay)+1) <= $daysForSpecificMonth) {
-        if ($countDay->format('j') == $dayToday) {
+        if (($countDay->format('j') == $dayToday) && $actualMonth === true) {
             echo '<td><span class="actualDay">'.(($day-$firstDay)+1).'</span></td>';
         } else if  ($day%7 == 0) {
             if ($daysForSpecificMonth-$day<=1 && $weeksDisplay-$day<=1 ) {
