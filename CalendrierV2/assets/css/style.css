@@ -47,6 +47,15 @@ header form {
     margin: 0 1em;
 
 }
+/* Partie design des select option */
+
+select {
+    background-color: rgb(232, 236, 233);
+}
+
+option{
+    margin: 1em 0;
+}
 
 
 /* Navigation entre les mois */
@@ -104,33 +113,35 @@ td span {
     font-size: 2rem;
 }
 
+
+
 .weekend {
     color: rgb(42, 218, 95);
 }
 
 .emptyBox {
-    color: rgb(131, 130, 130) ;
+    color: grey;
 }
-
 
 .changeDisplayButton {
     color: white;
     font-size: 2em;
 }
 .actualDay{
-    border-radius: 50%;
-    width:100px;
-    height: 36px;
-    padding: 2px 11px;
-
     background: #333333;
-    border: 2px solid rgb(179, 9, 9);
+    border-bottom: 2px solid rgb(179, 9, 9);
     color: rgb(255, 255, 255);
     text-align: center;
-
-    font: 32px Arial, sans-serif;
+    width: 45px;
 }
 
+select {
+    background-color: #cac5c5;
+    padding: 0.5em 0;
+}
+option:hover {
+    background-color: red;
+}
 
 
 .short {
@@ -149,4 +160,10 @@ td span {
         display: block;
     }
 
+}
+@media screen and (max-width:600px) {
+    
+td span {
+    font-size: 1rem;
+}
 }
