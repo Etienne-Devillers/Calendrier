@@ -25,20 +25,39 @@ $monthNumber = date('m');
 //Déclaration de la variable pour avoir notre échantillon d'année.
 $year = date('Y');
 
+if (!empty($_GET['month']) && !empty($_GET['year'])) {
+    $monthChoice = $_GET['month'];
+    $chosenYear = $_GET['year'];
+} else {
     $monthChoice = $_POST['month'] ?? date('n');
-    $chosenMonth = $monthsInYear[$monthChoice];
-    $lastMonth = ($monthChoice-1);
-    $nextMonth = ($monthChoice+1);
     $chosenYear = $_POST['year'] ?? date('Y');
-    $displayChoice = new DateTime("$chosenYear-$monthChoice");
+}
+
+$chosenMonth = $monthsInYear[$monthChoice];
+$lastMonth = ($monthChoice-1);
+$nextMonth = ($monthChoice+1);
+
+$displayChoice = new DateTime("$chosenYear-$monthChoice");
+$countDay = new DateTime("$chosenYear-$monthChoice");
+
+
+
+
+//Création de year-1 et year +1
+$nextYear =  new DateTime("$chosenYear-$monthChoice"); 
+$lastYear =  new DateTime("$chosenYear-$monthChoice"); 
+$interval =  new DateInterval('P1M');
+$nextYear->add(new DateInterval('P1M'));
+$lastYear->sub(new DateInterval('P1M'));
+$previousDisplayMonth = $lastYear->format('n');
+$previousDisplayYear = $lastYear->format('Y');
+$nextDisplayMonth = $nextYear->format('n');
+$nextDisplayYear = $nextYear->format('Y');
 
 //On trouve le premier jour du mois.
-
 $firstDay = $displayChoice-> format('N');
 
 
-
-// 0 Dimanche -> 6 Samedi
 
 //Combien de jour dans un mois.
 $daysForSpecificMonth = cal_days_in_month(CAL_GREGORIAN, $monthChoice, $chosenYear);
@@ -85,7 +104,9 @@ $weeksDisplay = $weeksInMonth*7;
         <h1>Calendrier -
             <?= (($chosenYear) && ($monthChoice))? $chosenMonth.' '.$chosenYear : 'à définir' ;?></h1>
         <div class="displayChoices">
-            <form action="" method="post">
+
+        <!-- Formulaire -->
+            <form action="./index.php" method="post">
 
                 <!-- Création du select pour les mois de l'année. -->
                 <label class="label" for="month">Mois : </label>
@@ -110,17 +131,16 @@ $weeksDisplay = $weeksInMonth*7;
                     ?>
                 </select>
                 <button type="submit">Modifier</button>
-
             </form>
         </div>
-    </header>
+    </header> 
 
     <div class="monthsMenu">
-        <div>
-            < <?=$monthsInYear[$lastMonth??''] ?? 'Mois précédent'?> 
+        <div class="changeDisplayButton">
+        <a href="./index.php?month=<?=$previousDisplayMonth?>&year=<?=$previousDisplayYear?>"><i class="arrow left"></i> <?=$monthsInYear[$lastMonth??''] ?? '< Année précédente' .'</a>'?></a>
         </div>
-        <div>
-            <?=$monthsInYear[$nextMonth??''] ?? 'Mois suivant'?> >
+        <div class="changeDisplayButton">
+        <a href="./index.php?month=<?=$nextDisplayMonth?>&year=<?=$nextDisplayYear?>"> <?=$monthsInYear[$nextMonth??''] ?? 'Année suivante >'?> <i class="arrow right"></i></a>
         </div>
     </div>
 
@@ -130,13 +150,13 @@ $weeksDisplay = $weeksInMonth*7;
 
 
 <tr>
-    <th>Lundi</th>
-    <th>Mardi</th>
-    <th>Mercredi</th>
-    <th>Jeudi</th>
-    <th>Vendredi</th>
-    <th>Samedi</th>
-    <th>Dimanche</th>
+    <th class=" weekDays"><span class="large">Lundi</span> <span class="short">Lun</span></th>
+    <th class=" weekDays"><span class="large">Mardi</span> <span class="short">Mar</span></th>
+    <th class="weekDays"><span class="large ">Mercredi</span> <span class="short ">Mer</span></th>
+    <th class=" weekDays"><span class="large">Jeudi</span> <span class="short">Jeu</span></th>
+    <th class=" weekDays"><span class="large">Vendredi</span> <span class="short">Ven</span></th>
+    <th class="weekDays"><span class="large">Samedi</span> <span class="short">Sam</span></th>
+    <th class=" weekDays"><span class="large">Dimanche</span> <span class="short">Dim</span></th>
 </tr>
 <tr>
 
@@ -157,11 +177,12 @@ while ($day <= $weeksDisplay) {
             } else {
                 echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td> </tr><tr>';
             }            
-        } else if ($day == 6 || $day == (6+n*7)) {
+        } else if (($day+1)%7 == 0) {
             echo '<td><span class="weekend">'.(($day-$firstDay)+1).'</span></td>';
         } else {
             echo '<td><span>'.(($day-$firstDay)+1).'</span></td>';
         }
+        $countDay->add(new DateInterval('P1D'));
         $day++;
     }
     echo (!$stop) ? ' <td><span class="emptyBox">-</span></td>': '';

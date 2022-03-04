@@ -8,6 +8,11 @@ body {
     font-family: 'Shippori Antique B1', sans-serif;
 }
 
+a {
+    color: white;
+    text-decoration: none;
+}
+
 header {
     width: 100vw;
     background-color: rgb(46, 43, 43);
@@ -24,11 +29,12 @@ header h1 {
     margin-top: 0;
     margin-bottom: 0;
 }
+
 header label {
     color: white;
 }
 
-header form{
+header form {
     margin: 0 0.5rem;
 }
 
@@ -38,16 +44,36 @@ header form{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 0 1em;
+
 }
 
 
+/* Navigation entre les mois */
+.arrow {
+    border: solid rgb(255, 255, 255);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 8px;
+
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
 
 
 /* --------------------Section tableau-------------------- */
 
-table{ 
+table {
     width: 100vw;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-spacing: 0;
     background-color: #333333;
     color: white;
@@ -57,15 +83,20 @@ table{
 
 th {
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.1);
-    width: 14.285%;  
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 14.285%;
 }
 
 td {
-    border: 1px solid rgba(255,255,255,0.1);
-    width: 14.285%;  
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 14.285%;
     height: 100px;
     vertical-align: initial;
+}
+
+td:hover {
+    background-color: #4b4949;
+    cursor: pointer;
 }
 
 td span {
@@ -73,10 +104,34 @@ td span {
     font-size: 2rem;
 }
 
-.emptyBox{
+.emptyBox {
     color: grey;
 }
 
-.weekend{
+.weekend {
     color: rgb(42, 218, 95);
+}
+
+
+.changeDisplayButton {
+    color: white;
+    font-size: 2em;
+}
+
+.short {
+    display: none;
+}
+
+
+/* Responsive  */
+@media screen and (max-width:600px) {
+    .large {
+        display: none;
+
+    }
+
+    .short {
+        display: block;
+    }
+
 }
