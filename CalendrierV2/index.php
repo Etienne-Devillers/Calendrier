@@ -1,5 +1,10 @@
 <?php
+require_once('testapi.php');
+// var_dump($holidaysArray);
+// die;
+
 //initialisaion du projet, définition des variables.
+$holiday = '';
 $actualMonth = false;
 $importantDay = '';
 $importantDaysArray = [
@@ -15,12 +20,7 @@ $importantDaysArray = [
     '12-25' => 'Noël',
 
 ];
-$holidaysArray = [
-    '10-23' => 'Début de la Toussaint',
-    '11-08' => 'Journée de la femme',
-  
 
-];
 
 
 //variable qui contient les douzes mois de l'année.
@@ -59,6 +59,7 @@ $holidaysArray = [
     $nextMonth = ($monthChoice+1);
     $displayChoice = new DateTime("$chosenYear-$monthChoice");
     $countDay = new DateTime("$chosenYear-$monthChoice");
+    $countDay2 = new DateTime("$chosenYear-$monthChoice");
     $displayedDay = $countDay -> format('m-d');
 
     //Création de year-1 et year +1
@@ -97,8 +98,6 @@ function weeksInMonth($dayCount, $daysForSpecificMonth) {
         } 
         $dayCount++;
         
-    //var_dump('jour:'.$dayCount. ', ');
-    //var_dump('nbr de semaine:'.$weeksInMonth.'<br>');
     }
     return $weeksInMonth;
     }
@@ -152,10 +151,28 @@ function isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $da
 }
 
 
-$startWinterHolidaysA = 
-function defineHolidays($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth,$countDay) {
-   $winterHolidaysA = '';
 
+function defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay2, $holidaysArray) {
+    $holiday ='';
+    if (($day >= $firstDay) && ($day <= $daysForSpecificMonth )){ 
+
+        $timeStampCountDay = $countDay2 ->getTimestamp();
+        
+        
+        foreach ($holidaysArray as $value) {
+            if (($timeStampCountDay >= $value->start) && ($timeStampCountDay <= ($value->start + 86400))) {
+                $holiday = '<div class="startHolidaysB holidaysB"></div>';
+            }  else if ($timeStampCountDay <= $value->end && ($timeStampCountDay+86400 >= ($value->end))) {
+                $holiday = '<div class="endHolidaysB holidaysB"></div>';
+            } 
+            else if (($timeStampCountDay >= $value->start) && ($timeStampCountDay <= $value->end)) {
+                $holiday = '<div class="holidaysB fullHolidaysB"></div>';
+            } 
+           
+        }
+        $countDay2 -> add(new DateInterval('P1D'));
+    } 
+    return $holiday;
 }
 ?>
 
@@ -243,11 +260,11 @@ function defineHolidays($day, $firstDay, $displayedDay, $importantDaysArray, $da
         $content = defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth);
 
         $importantDay = isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth, $countDay);
-        $holidays = defineHolidays();
+        $holiday =  defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay2, $holidaysArray);
 
         $tr = ($day%7 == 0) ? '</tr><tr>' : '';
-    echo '<td><span class="'.$class.'">'.$content.'</span>'.$importantDay.'</td>'.$tr;
-}
+    echo '<td><span class="'.$class.'">'.$content.'</span>'.$importantDay.''.$holiday.'</td>'.$tr;
+    }
 
 ?>
 </tr>

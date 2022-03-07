@@ -172,3 +172,21 @@ td span {
     font-size: 1rem;
 }
 }
+
+.startHolidaysB{
+    width: 85%;
+    margin-left: 20%;
+    border-radius: 15px 0 0 15px;
+}
+.holidaysB {
+    background-color: rgb(63, 178, 231);
+    height: 15px;
+    
+}
+.endHolidaysB{
+    border-radius: 0 15px 15px 0;
+    width: 85%;
+}
+.fullHolidaysB {
+    width: 110%;
+}
