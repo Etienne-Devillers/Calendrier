@@ -1,6 +1,27 @@
 <?php
-$actualMonth = false;
 //initialisaion du projet, définition des variables.
+$actualMonth = false;
+$importantDay = '';
+$importantDaysArray = [
+    '03-08' => 'Journée de la femme',
+    '04-13' => 'Pâques',
+    '05-01' => 'Fête du travail',
+    '05-08' => 'Ascension',
+    '06-01' => 'la Pentecôte',
+    '07-14' => 'Fête Nationale',
+    '15-15' => 'Assomption',
+    '11-01' => 'Toussaint',
+    '11-11' => 'Armistice de 1918',
+    '12-25' => 'Noël',
+
+];
+$holidaysArray = [
+    '10-23' => 'Début de la Toussaint',
+    '11-08' => 'Journée de la femme',
+  
+
+];
+
 
 //variable qui contient les douzes mois de l'année.
     $monthsInYear = [
@@ -38,8 +59,7 @@ $actualMonth = false;
     $nextMonth = ($monthChoice+1);
     $displayChoice = new DateTime("$chosenYear-$monthChoice");
     $countDay = new DateTime("$chosenYear-$monthChoice");
-
-
+    $displayedDay = $countDay -> format('m-d');
 
     //Création de year-1 et year +1
     $nextYear =  new DateTime("$chosenYear-$monthChoice"); 
@@ -87,7 +107,7 @@ function weeksInMonth($dayCount, $daysForSpecificMonth) {
     $weeksInMonth =weeksInMonth($firstDay, $daysForSpecificMonth);
 $weeksDisplay = $weeksInMonth*7;
 
-function defineClass($day, $firstDay, $dayToday, $countDay, $actualMonth, $daysForSpecificMonth) {
+function defineClass($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth) {
     $class='';
     if ((($day-$firstDay)+1 == $dayToday) && ($actualMonth === true)){
         $class .= 'actualDay ';
@@ -104,7 +124,7 @@ return $class;
 
 // Fonction qui va définir le contenu à afficher dans les cases.
 
-function defineContent($day, $firstDay, $dayToday, $countDay, $actualMonth, $daysForSpecificMonth) {
+function defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth) {
     $content='';
     if (($day < $firstDay) || ($day >= $daysForSpecificMonth+$firstDay) ){
         $content .= '-';
@@ -112,6 +132,30 @@ function defineContent($day, $firstDay, $dayToday, $countDay, $actualMonth, $day
         $content .= ($day-$firstDay)+1;
     }
 return $content;
+}
+
+
+function isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth,$countDay) {
+    $importantDay ='';
+    if (($day >= $firstDay) && ($day <= $daysForSpecificMonth )){
+
+        $displayedDay = $countDay -> format('m-d');
+
+        foreach ($importantDaysArray as $key => $value) {
+            if ($displayedDay == $key) {
+            $importantDay = '<span class="importantDay">'.$value.'</span>';
+            }
+        }
+        $countDay -> add(new DateInterval('P1D'));
+    }
+    return $importantDay;
+}
+
+
+$startWinterHolidaysA = 
+function defineHolidays($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth,$countDay) {
+   $winterHolidaysA = '';
+
 }
 ?>
 
@@ -195,12 +239,14 @@ return $content;
 
 
     for ($day=1; $day <= $weeksDisplay; $day++) { 
-        $class = defineClass($day, $firstDay, $dayToday, $countDay, $actualMonth, $daysForSpecificMonth);
-        $content = defineContent($day, $firstDay, $dayToday, $countDay, $actualMonth, $daysForSpecificMonth);
+        $class = defineClass($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth);
+        $content = defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth);
 
+        $importantDay = isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth, $countDay);
+        $holidays = defineHolidays();
 
         $tr = ($day%7 == 0) ? '</tr><tr>' : '';
-    echo '<td><span class="'.$class.'">'.$content.'</span></td>'.$tr;
+    echo '<td><span class="'.$class.'">'.$content.'</span>'.$importantDay.'</td>'.$tr;
 }
 
 ?>
