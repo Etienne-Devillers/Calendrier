@@ -1,5 +1,6 @@
 <?php
 require_once('testapi.php');
+// require_once('zoneA.php');
 // var_dump($holidaysArray);
 // die;
 
@@ -60,6 +61,7 @@ $importantDaysArray = [
     $displayChoice = new DateTime("$chosenYear-$monthChoice");
     $countDay = new DateTime("$chosenYear-$monthChoice");
     $countDay2 = new DateTime("$chosenYear-$monthChoice");
+    $countDay3 = new DateTime("$chosenYear-$monthChoice");
     $displayedDay = $countDay -> format('m-d');
 
     //Création de year-1 et year +1
@@ -174,6 +176,28 @@ function defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$c
     } 
     return $holiday;
 }
+// function defineHolidaysA($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay3, $holidaysArrayA) {
+    //     $holiday ='';
+    //     if (($day >= $firstDay) && ($day <= $daysForSpecificMonth )){ 
+
+    //         $timeStampCountDay = $countDay3 ->getTimestamp();
+            
+            
+    //         foreach ($holidaysArrayA as $value) {
+    //             if (($timeStampCountDay >= $value->start) && ($timeStampCountDay <= ($value->start + 86400))) {
+    //                 $holiday = '<div class="startHolidaysA holidaysA"></div>';
+    //             }  else if ($timeStampCountDay <= $value->end && ($timeStampCountDay+86400 >= ($value->end))) {
+    //                 $holiday = '<div class="endHolidaysA holidaysA"></div>';
+    //             } 
+    //             else if (($timeStampCountDay >= $value->start) && ($timeStampCountDay <= $value->end)) {
+    //                 $holiday = '<div class="holidaysA fullHolidaysA"></div>';
+    //             } 
+            
+    //         }
+    //         $countDay3 -> add(new DateInterval('P1D'));
+    //     } 
+    //     return $holiday;
+// }
 ?>
 
 
@@ -261,7 +285,8 @@ function defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$c
 
         $importantDay = isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth, $countDay);
         $holiday =  defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay2, $holidaysArray);
-
+        // $holidayA =  defineHolidaysA($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay2, $holidaysArrayA);
+        // $holiday .= $holidayA;
         $tr = ($day%7 == 0) ? '</tr><tr>' : '';
     echo '<td><span class="'.$class.'">'.$content.'</span>'.$importantDay.''.$holiday.'</td>'.$tr;
     }

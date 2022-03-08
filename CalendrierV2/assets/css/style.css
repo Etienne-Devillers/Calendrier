@@ -190,3 +190,21 @@ td span {
 .fullHolidaysB {
     width: 110%;
 }
+
+.startHolidaysA{
+    width: 85%;
+    margin-left: 20%;
+    border-radius: 15px 0 0 15px;
+}
+.holidaysA {
+    background-color: rgb(231, 63, 63);
+    height: 15px;
+    margin-top: 10px;
+}
+.endHolidaysA{
+    border-radius: 0 15px 15px 0;
+    width: 85%;
+}
+.fullHolidaysA {
+    width: 110%;
+}
