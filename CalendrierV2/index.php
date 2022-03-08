@@ -74,6 +74,7 @@ $importantDaysArray = [
     $previousDisplayYear = $lastYear->format('Y');
     $nextDisplayMonth = $nextYear->format('n');
     $nextDisplayYear = $nextYear->format('Y');
+    $nextMonthDayCount = 1;
 
 //On trouve le premier jour du mois.
 $firstDay = $displayChoice-> format('N');
@@ -88,7 +89,8 @@ $dayToday = date('j');
 
 //Combien de jour dans un mois.
 $daysForSpecificMonth = cal_days_in_month(CAL_GREGORIAN, $monthChoice, $chosenYear);
-
+$daysInLastMonth = cal_days_in_month(CAL_GREGORIAN, $previousDisplayMonth, $chosenYear);
+$displayLastMonthDays = ($daysInLastMonth - $firstDay)+2 ;
 //combien de semaine dans le mois.
 function weeksInMonth($dayCount, $daysForSpecificMonth) {
     $weeksInMonth = 1;
@@ -125,10 +127,15 @@ return $class;
 
 // Fonction qui va définir le contenu à afficher dans les cases.
 
-function defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth) {
+function defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth, $nextMonthDayCount, $displayLastMonthDays) {
     $content='';
-    if (($day < $firstDay) || ($day >= $daysForSpecificMonth+$firstDay) ){
-        $content .= '-';
+
+    if ($day < $firstDay) { 
+        $content=$displayLastMonthDays;
+        
+    }else if ($day >= ($daysForSpecificMonth+$firstDay)){
+        $content .= $nextMonthDayCount;
+        $nextMonthDayCount ++;
     } else {
         $content .= ($day-$firstDay)+1;
     }
@@ -281,7 +288,7 @@ function defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$c
 
     for ($day=1; $day <= $weeksDisplay; $day++) { 
         $class = defineClass($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth);
-        $content = defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth);
+        $content = defineContent($day, $firstDay, $dayToday, $actualMonth, $daysForSpecificMonth, $nextMonthDayCount, $displayLastMonthDays);
 
         $importantDay = isImportantDay($day, $firstDay, $displayedDay, $importantDaysArray, $daysForSpecificMonth, $countDay);
         $holiday =  defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$countDay2, $holidaysArray);
@@ -289,7 +296,12 @@ function defineHolidays($day, $firstDay, $displayedDay, $daysForSpecificMonth,$c
         // $holiday .= $holidayA;
         $tr = ($day%7 == 0) ? '</tr><tr>' : '';
     echo '<td><span class="'.$class.'">'.$content.'</span>'.$importantDay.''.$holiday.'</td>'.$tr;
+    $displayLastMonthDays++;
+    if ($day >= ($daysForSpecificMonth+$firstDay)){
+        $nextMonthDayCount ++;
     }
+
+}
 
 ?>
 </tr>
